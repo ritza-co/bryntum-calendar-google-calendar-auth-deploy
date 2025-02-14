@@ -8,6 +8,7 @@ import { BryntumSync, listCalendarEvents } from '../crudFunctions';
 import bryntumLogo from '../assets/bryntum-symbol-white.svg';
 import '@bryntum/calendar/calendar.stockholm.css';
 import '../css/App.css';
+import SignInButton from './SignInButton';
 
 function App() {
     const calendarRef = useRef(null);
@@ -118,14 +119,23 @@ function App() {
                     <img src={bryntumLogo} role="presentation" alt="Bryntum logo" />
                     <h1>Google Calendar Sign-in Demo</h1>
                 </div>
-                { accessToken ? (
+                { accessToken ?
                     <SignOutButton
                         accessToken={accessToken}
                         setAccessToken={setAccessToken}
                         setEvents={setEvents}
                         setModalVisible={setModalVisible}
                     />
-                ) : null }
+                    : null
+                }
+                { !accessToken && !isLoading ?
+                    <SignInButton
+                        setModalVisible={setModalVisible}
+                        setAccessToken={setAccessToken}
+                        setEvents={setEvents}
+                    />
+                    : null
+                }
             </header>
             <BryntumCalendar
                 ref={calendarRef}
@@ -134,6 +144,31 @@ function App() {
                 }}
                 {...calendarConfig}
             />
+            <div className="notice-info">
+                <div className="notice-info-container">
+                    <p className='notice-info-text'>
+                    This is a publicly accessible demonstration of the{' '}
+                        <a href="https://bryntum.com/products/calendar/">
+                          Bryntum Calendar Component.
+                        </a>{' '}
+                        By signing in, you’ll be able to see how real events from your
+                        Google Calendar are displayed in the Bryntum Calendar. You’ll also
+                        be able to edit your events in the Bryntum Calendar component and
+                        see those changles reflect on your Google Calendar. Note that after
+                        signing in, you’ll need to grant us read and write access to your
+                        Google Calendar. We do not store any events for longer than needed
+                        to display them and send any changes back to Google Calendar and we
+                        do not do anything with your data beyond what is strictly needed for
+                        the demonstration.
+                    </p>
+                    <p className='notice-info-links'>
+                    To provide these features, we request access to your Google Calendar
+                    data. View our
+                        <a href="/privacypolicy.html"> Privacy Policy</a> and{' '}
+                        <a href="/termsofservice.html">Terms of Service</a>.
+                    </p>
+                </div>
+            </div>
         </GoogleOAuthProvider>
     );
 }
